@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.conf.urls import include
 from django.urls import path
-from watchparty.views import register_user, login_user
+from watchpartyapi.views import register_user, login_user
 
 urlpatterns = [
     path('admin/', admin.site.urls),
