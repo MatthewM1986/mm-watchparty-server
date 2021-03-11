@@ -1,6 +1,6 @@
 [
     {
-        "model": "watchpartyapy.watchparty",
+        "model": "watchpartyapi.watchparty",
         "pk": 1,
         "fields": {
             "name": "Preds Watch Party at Main Street Pub",
@@ -11,7 +11,7 @@
         }
     },
     {
-        "model": "watchpartyapy.watchparty",
+        "model": "watchpartyapi.watchparty",
         "pk": 2,
         "fields": {
             "name": "Preds Awesome Watch Party",
@@ -22,7 +22,7 @@
         }
     },
     {
-        "model": "watchpartyapy.watchparty",
+        "model": "watchpartyapi.watchparty",
         "pk": 3,
         "fields": {
             "name": "Bristol Watch party",

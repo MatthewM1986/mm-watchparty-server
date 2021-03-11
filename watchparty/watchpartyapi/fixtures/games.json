@@ -1,6 +1,6 @@
 [
     {
-        "model": "watchparty.game",
+        "model": "watchpartyapi.game",
         "pk": 1,
         "fields": {
             "name": "NHL Predators vs Redwings",
@@ -12,7 +12,7 @@
         }
     },
     {
-        "model": "watchparty.game",
+        "model": "watchpartyapi.game",
         "pk": 2,
         "fields": {
             "name": "MLB Padres vs Reds",
@@ -24,7 +24,7 @@
         }
     },
     {
-        "model": "watchparty.game",
+        "model": "watchpartyapi.game",
         "pk": 3,
         "fields": {
             "name": "Nascar Bristol Dirt Race",
