@@ -1,0 +1,23 @@
+[
+    {
+        "model": "watchpartypapi.sporttype",
+        "pk": 1,
+        "fields": {
+            "type": "Baseball"
+        }
+    },
+    {
+        "model": "watchpartypapi.sporttype",
+        "pk": 2,
+        "fields": {
+            "type": "Hockey"
+        }
+    },
+    {
+        "model": "watchpartypapi.sporttype",
+        "pk": 3,
+        "fields": {
+            "type": "Auto Racing"
+        }
+    }
+]

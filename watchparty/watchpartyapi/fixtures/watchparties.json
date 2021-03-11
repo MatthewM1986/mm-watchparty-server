@@ -1,0 +1,35 @@
+[
+    {
+        "model": "watchpartyapy.watchparty",
+        "pk": 1,
+        "fields": {
+            "name": "Preds Watch Party at Main Street Pub",
+            "scheduled_time": "7:00",
+            "game": 1,
+            "location": "Main Street Pub, Hendersonville, Tn",
+            "number_of_fans": 6
+        }
+    },
+    {
+        "model": "watchpartyapy.watchparty",
+        "pk": 2,
+        "fields": {
+            "name": "Preds Awesome Watch Party",
+            "scheduled_time": "7:00",
+            "game": 1,
+            "location": "Chili's, Madison, tn",
+            "number_of_fans": 4
+        }
+    },
+    {
+        "model": "watchpartyapy.watchparty",
+        "pk": 3,
+        "fields": {
+            "name": "Bristol Watch party",
+            "scheduled_time": "12:00",
+            "game": 3,
+            "location": "119 Heather Lane, Lebanon, TN",
+            "number_of_fans": 10
+        }
+    }
+]

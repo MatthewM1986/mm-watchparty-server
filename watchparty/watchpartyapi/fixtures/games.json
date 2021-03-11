@@ -1,0 +1,38 @@
+[
+    {
+        "model": "watchparty.game",
+        "pk": 1,
+        "fields": {
+            "name": "NHL Predators vs Redwings",
+            "sport_type": 1,
+            "team_one": "Nashville Predators",
+            "team_two": "Detroit Redwings",
+            "date": "2021-04-16",
+            "description": "Always exciting when the Preds play the Wings"
+        }
+    },
+    {
+        "model": "watchparty.game",
+        "pk": 2,
+        "fields": {
+            "name": "MLB Padres vs Reds",
+            "sport_type": 2,
+            "team_one": "San Diego Padres",
+            "team_two": "Cincinnati Reds",
+            "date": "2021-04-20",
+            "description": "Will the Padres continure their domination"
+        }
+    },
+    {
+        "model": "watchparty.game",
+        "pk": 3,
+        "fields": {
+            "name": "Nascar Bristol Dirt Race",
+            "sport_type": 3,
+            "team_one": "NA",
+            "team_two": "NA",
+            "date": "2021-04-28",
+            "description": "First Dirt Race in Nascar since 1970"
+        }
+    }
+]

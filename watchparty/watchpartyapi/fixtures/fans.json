@@ -1,0 +1,20 @@
+[
+    {
+        "model": "watchpartyapi.fan",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "fav_sport": "Hockey",
+            "fav_team": "Nashville Predators"
+        }
+    },
+    {
+        "model": "watchpartyapi.fan",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "fav_sport": "Baseball",
+            "fav_team": "San Diego Padres"
+        }
+    }
+]
