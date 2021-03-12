@@ -51,6 +51,7 @@ def register_user(request):
     # Create a new user by invoking the `create_user` helper method
     # on Django's built-in User model
     new_user = User.objects.create_user(
+        username=req_body['email'],
         email=req_body['email'],
         password=req_body['password'],
         first_name=req_body['first_name'],
@@ -59,8 +60,9 @@ def register_user(request):
 
     # Now save the extra info in the table
     fan = Fan.objects.create(
-        bio=req_body['bio'],
-        user=new_user
+        user=new_user,
+        fav_sport=req_body['fav_sport'],
+        fav_team=req_body['fav_team']
     )
 
     # Commit the user to the database by saving it
