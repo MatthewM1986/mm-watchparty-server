@@ -1,5 +1,6 @@
 """View module for handling requests about sport types"""
 from django.http import HttpResponseServerError
+from django.core.exceptions import ValidationError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
@@ -48,6 +49,7 @@ class WatchParties(ViewSet):
         watchparty.name = request.data["name"]
         watchparty.scheduled_time = request.data["scheduled_time"]
         watchparty.location = request.data["location"]
+        watchparty.number_of_fans = request.data["number_of_fans"]
         game = Game.objects.get(pk=request.data["gameId"])
         watchparty.game = game
 
