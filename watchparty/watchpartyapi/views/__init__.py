@@ -3,3 +3,4 @@ from .auth import register_user
 from .sporttype import SportTypes
 from .game import Games
 from .fan import Fans
+from .watchparty import WatchParties
