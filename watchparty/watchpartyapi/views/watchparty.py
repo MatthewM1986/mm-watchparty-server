@@ -3,7 +3,7 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
-from watchpartyapi.models import WatchParty
+from watchpartyapi.models import WatchParty, Fan, Game
 
 
 class WatchParties(ViewSet):
@@ -36,6 +36,30 @@ class WatchParties(ViewSet):
             watchparties, many=True, context={'request': request})
         return Response(serializer.data)
 
+    def create(self, request):
+        """Handle POST operations for watch parties
+        Returns:
+            Response -- JSON serialized event instance
+        """
+        fan = Fan.objects.get(user=request.auth.user)
+
+        watchparty = WatchParty()
+        watchparty.name = request.data["name"]
+        watchparty.scheduled_time = request.data["scheduled_time"]
+        watchparty.location = request.data["location"]
+        watchparty.number_of_fans = request.data["number_of_fans"]
+
+        watchparty = WatchParty.objects.get(pk=request.data["fanId"])
+        watchparty.game = game
+
+        try:
+            watchparty.save()
+            serializer = WatchPartySerializer(
+                watchparty, context={'request': request})
+            return Response(serializer.data)
+        except ValidationError as ex:
+            return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class WatchPartySerializer(serializers.ModelSerializer):
     """JSON serializer for watch parties
@@ -46,3 +70,4 @@ class WatchPartySerializer(serializers.ModelSerializer):
         model = WatchParty
         fields = ('name', 'scheduled_time', 'game',
                   'location', 'number_of_fans')
+        depth = 2
