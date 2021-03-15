@@ -3,9 +3,11 @@ from django.urls import path
 from rest_framework import routers
 from watchpartyapi.views import register_user, login_user
 from watchpartyapi.views import SportTypes
+from watchpartyapi.views import Games
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'sporttypes', SportTypes, 'sporttype')
+router.register(r'games', Games, 'game')
 
 urlpatterns = [
     path('', include(router.urls)),
