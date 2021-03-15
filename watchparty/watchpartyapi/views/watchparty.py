@@ -4,6 +4,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from watchpartyapi.models import WatchParty, Fan, Game
+from watchpartyapi.views.game import GameSerializer
 
 
 class WatchParties(ViewSet):
@@ -41,15 +42,13 @@ class WatchParties(ViewSet):
         Returns:
             Response -- JSON serialized event instance
         """
-        fan = Fan.objects.get(user=request.auth.user)
+        # fan = Fan.objects.get(user=request.auth.user)
 
         watchparty = WatchParty()
         watchparty.name = request.data["name"]
         watchparty.scheduled_time = request.data["scheduled_time"]
         watchparty.location = request.data["location"]
-        watchparty.number_of_fans = request.data["number_of_fans"]
-
-        watchparty = WatchParty.objects.get(pk=request.data["fanId"])
+        game = Game.objects.get(pk=request.data["gameId"])
         watchparty.game = game
 
         try:
@@ -66,8 +65,21 @@ class WatchPartySerializer(serializers.ModelSerializer):
     Arguments:
         serializers
     """
+    game = GameSerializer(many=False)
+
     class Meta:
         model = WatchParty
         fields = ('name', 'scheduled_time', 'game',
                   'location', 'number_of_fans')
+        depth = 2
+
+
+class GameSerializer(serializers.ModelSerializer):
+    """JSON serializer for games
+    Arguments:
+        serializers
+    """
+    class Meta:
+        model = Game
+        fields = ('sport_type', 'team_one', 'team_two', 'date', 'description')
         depth = 2
