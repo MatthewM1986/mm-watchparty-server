@@ -1,4 +1,4 @@
-"""View module for handling requests about game types"""
+"""View module for handling requests about sport types"""
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
@@ -25,7 +25,7 @@ class SportTypes(ViewSet):
     def list(self, request):
         """Handle GET requests to get all sport types
         Returns:
-            Response -- JSON serialized list of game types
+            Response -- JSON serialized list of sport types
         """
         sporttypes = SportType.objects.all()
 
