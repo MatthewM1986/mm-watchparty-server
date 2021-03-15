@@ -3,7 +3,9 @@
         "model": "watchpartyapi.fan",
         "pk": 1,
         "fields": {
-            "user": 1
+            "user": 1,
+            "fav_sport": "NA",
+            "fav_team": "NA"
         }
     }
 ]

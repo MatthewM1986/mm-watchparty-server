@@ -3,46 +3,45 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
-from watchpartyapi.models import Game
+from watchpartyapi.models import Fan
 
 
-class Games(ViewSet):
-    """watch party games"""
+class Fans(ViewSet):
+    """watch party fans"""
 
     def retrieve(self, request, pk=None):
-        """Handle GET requests for single game
+        """Handle GET requests for single fan
         Returns:
-            Response -- JSON serialized game
+            Response -- JSON serialized fan
         """
         try:
-            game = Game.objects.get(pk=pk)
-            serializer = GameSerializer(
-                game, context={'request': request})
+            fan = Fan.objects.get(pk=pk)
+            serializer = FanSerializer(
+                fan, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
 
     def list(self, request):
-        """Handle GET requests to get all games
+        """Handle GET requests to get all fans
         Returns:
-            Response -- JSON serialized list of games
+            Response -- JSON serialized list of fans
         """
-        games = Game.objects.all()
+        fans = Fan.objects.all()
 
         # Note the addtional `many=True` argument to the
         # serializer. It's needed when you are serializing
         # a list of objects instead of a single object.
-        serializer = GameSerializer(
-            games, many=True, context={'request': request})
+        serializer = FanSerializer(
+            fans, many=True, context={'request': request})
         return Response(serializer.data)
 
 
-class GameSerializer(serializers.ModelSerializer):
-    """JSON serializer for games
+class FanSerializer(serializers.ModelSerializer):
+    """JSON serializer for fans
     Arguments:
         serializers
     """
     class Meta:
-        model = Game
-        fields = ('sport_type', 'team_one', 'team_two', 'date', 'description')
-        depth = 2
+        model = Fan
+        fields = ('user', 'fav_sport', 'fav_team')
