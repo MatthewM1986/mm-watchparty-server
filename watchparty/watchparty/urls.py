@@ -5,11 +5,13 @@ from watchpartyapi.views import register_user, login_user
 from watchpartyapi.views import SportTypes
 from watchpartyapi.views import Games
 from watchpartyapi.views import Fans
+from watchpartyapi.views import WatchParties
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'sporttypes', SportTypes, 'sporttype')
 router.register(r'games', Games, 'game')
 router.register(r'fans', Fans, 'fan')
+router.register(r'watchparties', WatchParties, 'watchparty')
 
 urlpatterns = [
     path('', include(router.urls)),
