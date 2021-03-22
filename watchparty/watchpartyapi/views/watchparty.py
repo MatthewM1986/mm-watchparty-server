@@ -52,8 +52,7 @@ class WatchParties(ViewSet):
         watchparty.scheduled_time = request.data["scheduled_time"]
         watchparty.location = request.data["location"]
         watchparty.number_of_fans = request.data["number_of_fans"]
-        game = Game.objects.get(pk=request.data["gameId"])
-        watchparty.game = game
+        watchparty.game = Game.objects.get(name=request.data["game"])
 
         try:
             watchparty.save()
