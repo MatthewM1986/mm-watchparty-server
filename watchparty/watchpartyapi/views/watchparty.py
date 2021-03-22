@@ -5,6 +5,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import serializers
+from rest_framework.decorators import action
 from watchpartyapi.models import WatchParty, Fan, Game
 from watchpartyapi.views.game import GameSerializer
 
@@ -97,7 +98,7 @@ class WatchParties(ViewSet):
 
     @action(methods=['post', 'delete'], detail=True)
     def signup(self, request, pk=None):
-        """Managing gamers signing up for events"""
+        """Managing fans signing up for watch parties"""
 
         # A fan wants to sign up for a watchparty
         if request.method == "POST":
@@ -159,16 +160,16 @@ class WatchParties(ViewSet):
         return Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-class WatchPartyUserSerializer(serializers.ModelSerializer):
-    """JSON serializer for Watch Party organizer's related Django user"""
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email']
+# class WatchPartyUserSerializer(serializers.ModelSerializer):
+#     """JSON serializer for Watch Party organizer's related Django user"""
+#     class Meta:
+#         model = User
+#         fields = ['first_name', 'last_name', 'email']
 
 
 class WatchPartyFan(serializers.ModelSerializer):
     """JSON serializer for Watch Party organizer"""
-    user = WatchPartyUserSerializer(many=False)
+    # user = WatchPartyUserSerializer(many=False)
 
     class Meta:
         model = Fan
