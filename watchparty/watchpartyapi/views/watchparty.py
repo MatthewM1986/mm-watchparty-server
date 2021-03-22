@@ -95,6 +95,85 @@ class WatchParties(ViewSet):
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    @action(methods=['post', 'delete'], detail=True)
+    def signup(self, request, pk=None):
+        """Managing gamers signing up for events"""
+
+        # A fan wants to sign up for a watchparty
+        if request.method == "POST":
+
+            event = Event.objects.get(pk=pk)
+
+            # Django uses the `Authorization` header to determine
+            # which user is making the request to sign up
+            fan = Fan.objects.get(user=request.auth.user)
+
+            try:
+                # Determine if the user is already signed up
+                registration = WatchPartyFan.objects.get(
+                    watchparty=watchparty, fan=fan)
+                return Response(
+                    {'message': 'Fan already signed up this watch party.'},
+                    status=status.HTTP_422_UNPROCESSABLE_ENTITY
+                )
+            except WatchPartyFan.DoesNotExist:
+                # The user is not signed up.
+                registration = WatchPartyFan()
+                registration.watchparty = watchparty
+                registration.fan = fan
+                registration.save()
+
+                return Response({}, status=status.HTTP_201_CREATED)
+
+        # User wants to leave a previously joined watch party
+        elif request.method == "DELETE":
+            # Handle the case if the client specifies a watch party
+            # that doesn't exist
+            try:
+                watchparty = WatchParty.objects.get(pk=pk)
+            except WatchParty.DoesNotExist:
+                return Response(
+                    {'message': 'Watch Party does not exist.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # Get the authenticated user
+            fan = Fan.objects.get(user=request.auth.user)
+
+            try:
+                # Try to delete the signup
+                registration = WatchPartyFan.objects.get(
+                    watchparty=watchparty, fan=fan)
+                registration.delete()
+                return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+            except WatchPartyFan.DoesNotExist:
+                return Response(
+                    {'message': 'Not currently registered for Watch Party.'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+        # If the client performs a request with a method of
+        # anything other than POST or DELETE, tell client that
+        # the method is not supported
+        return Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+class WatchPartyUserSerializer(serializers.ModelSerializer):
+    """JSON serializer for Watch Party organizer's related Django user"""
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+
+class WatchPartyFan(serializers.ModelSerializer):
+    """JSON serializer for Watch Party organizer"""
+    user = WatchPartyUserSerializer(many=False)
+
+    class Meta:
+        model = Fan
+        fields = ['user']
+
 
 class GameSerializer(serializers.ModelSerializer):
     """JSON serializer for games
@@ -103,7 +182,8 @@ class GameSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Game
-        fields = ('sport_type', 'team_one', 'team_two', 'date', 'description')
+        fields = ('name', 'sport_type', 'team_one',
+                  'team_two', 'date', 'description')
         depth = 2
 
 
