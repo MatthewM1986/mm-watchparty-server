@@ -198,6 +198,6 @@ class WatchPartySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WatchParty
-        fields = ('name', 'scheduled_time', 'game',
+        fields = ('id', 'name', 'scheduled_time', 'game',
                   'location', 'number_of_fans')
         depth = 2
