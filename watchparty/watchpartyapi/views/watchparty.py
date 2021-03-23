@@ -1,12 +1,14 @@
 """View module for handling requests about sport types"""
+from django.contrib.auth.models import User
 from django.http import HttpResponseServerError
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import serializers
 from rest_framework.decorators import action
-from watchpartyapi.models import WatchParty, Fan, Game
+from watchpartyapi.models import WatchParty, Fan, Game, WatchPartyFan
 from watchpartyapi.views.game import GameSerializer
 
 
@@ -45,7 +47,7 @@ class WatchParties(ViewSet):
         Returns:
             Response -- JSON serialized event instance
         """
-        # fan = Fan.objects.get(user=request.auth.user)
+        fan = Fan.objects.get(user=request.auth.user)
 
         watchparty = WatchParty()
         watchparty.name = request.data["name"]
@@ -102,7 +104,7 @@ class WatchParties(ViewSet):
         # A fan wants to sign up for a watchparty
         if request.method == "POST":
 
-            event = Event.objects.get(pk=pk)
+            watchparty = WatchParty.objects.get(pk=pk)
 
             # Django uses the `Authorization` header to determine
             # which user is making the request to sign up
@@ -113,7 +115,7 @@ class WatchParties(ViewSet):
                 registration = WatchPartyFan.objects.get(
                     watchparty=watchparty, fan=fan)
                 return Response(
-                    {'message': 'Fan already signed up this watch party.'},
+                    {'message': 'Fan has already signed up for this watch party.'},
                     status=status.HTTP_422_UNPROCESSABLE_ENTITY
                 )
             except WatchPartyFan.DoesNotExist:
@@ -159,20 +161,20 @@ class WatchParties(ViewSet):
         return Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-# class WatchPartyUserSerializer(serializers.ModelSerializer):
-#     """JSON serializer for Watch Party organizer's related Django user"""
-#     class Meta:
-#         model = User
-#         fields = ['first_name', 'last_name', 'email']
+class WatchPartyUserSerializer(serializers.ModelSerializer):
+    """JSON serializer for Watch Party organizer's related Django user"""
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
 
 
-class WatchPartyFan(serializers.ModelSerializer):
+class WatchPartyFanSerializer(serializers.ModelSerializer):
     """JSON serializer for Watch Party organizer"""
-    # user = WatchPartyUserSerializer(many=False)
+    fan = WatchPartyUserSerializer(many=False)
 
     class Meta:
-        model = Fan
-        fields = ['user']
+        model = WatchPartyFan
+        fields = ['fan']
 
 
 class GameSerializer(serializers.ModelSerializer):
