@@ -6,5 +6,6 @@
             "name": "database",
             "database": "${workspaceFolder:server}/watchparty/db.sqlite3"
         }
-    ]
+    ],
+    "python.pythonPath": "/Users/machurek/.local/share/virtualenvs/server--ZWEKs4u/bin/python"
 }
