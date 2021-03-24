@@ -33,7 +33,23 @@ class WatchParties(ViewSet):
         Returns:
             Response -- JSON serialized list of watch parties
         """
+        fan = Fan.objects.get(user=request.auth.user)
         watchparties = WatchParty.objects.all()
+
+        # Set the `joined` property on every watchparty
+        for watchparty in watchparties:
+            watchparty.joined = None
+
+            try:
+                WatchPartyFans.objects.get(watchparty=watchparty, fan=fan)
+                watchparty.joined = True
+            except WatchPartyFans.DoesNotExist:
+                watchparty.joined = False
+
+        # Support filtering watch parties by sport type
+        sporttype = self.request.query_params.get('sportTypeId', None)
+        if sporttype is not None:
+            watchparties = watchparties.filter(sport_type__id=type)
 
         # Note the addtional `many=True` argument to the
         # serializer. It's needed when you are serializing
@@ -74,7 +90,7 @@ class WatchParties(ViewSet):
         watchparty.scheduled_time = request.data["scheduled_time"]
         watchparty.location = request.data["location"]
         watchparty.number_of_fans = request.data["number_of_fans"]
-        game = Game.objects.get(pk=request.data["gameId"])
+        game = Game.objects.get(pk=request.data["id"])
         watchparty.game = game
         watchparty.save()
 
@@ -199,5 +215,6 @@ class WatchPartySerializer(serializers.ModelSerializer):
     class Meta:
         model = WatchParty
         fields = ('id', 'name', 'scheduled_time', 'game',
-                  'location', 'number_of_fans')
+                  'location', 'number_of_fans',
+                  'joined')
         depth = 2
