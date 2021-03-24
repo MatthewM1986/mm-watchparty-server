@@ -41,9 +41,9 @@ class WatchParties(ViewSet):
             watchparty.joined = None
 
             try:
-                WatchPartyFans.objects.get(watchparty=watchparty, fan=fan)
+                WatchPartyFan.objects.get(watchparty=watchparty, fan=fan)
                 watchparty.joined = True
-            except WatchPartyFans.DoesNotExist:
+            except WatchPartyFan.DoesNotExist:
                 watchparty.joined = False
 
         # Support filtering watch parties by sport type
