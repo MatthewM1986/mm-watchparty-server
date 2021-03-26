@@ -34,5 +34,41 @@
             "date": "2021-04-28",
             "description": "First Dirt Race in Nascar since 1970"
         }
+    },
+    {
+        "model": "watchpartyapi.game",
+        "pk": 4,
+        "fields": {
+            "name": "NBA Grizzlies vs Clippers",
+            "sport_type": 7,
+            "team_one": "Memphis Grizzlies",
+            "team_two": "Los Angeles Clippers",
+            "date": "2021-04-18",
+            "description": "Will the Grizzlies continure their winning streak?"
+        }
+    },
+    {
+        "model": "watchpartyapi.game",
+        "pk": 5,
+        "fields": {
+            "name": "X-Games",
+            "sport_type": 6,
+            "team_one": "NA",
+            "team_two": "NA",
+            "date": "2021-04-15",
+            "description": "Freestyle Motocross final round"
+        }
+    },
+    {
+        "model": "watchpartyapi.game",
+        "pk": 6,
+        "fields": {
+            "name": "NCAA Fighting Irish vs Boston College",
+            "sport_type": 4,
+            "team_one": "Notre Dame Fighting Irish",
+            "team_two": "Boston College",
+            "date": "2021-04-30",
+            "description": "The Great Catholic School Rivalry"
+        }
     }
 ]
