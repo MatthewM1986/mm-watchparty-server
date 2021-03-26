@@ -71,7 +71,8 @@ class WatchParties(ViewSet):
         watchparty.scheduled_time = request.data["scheduled_time"]
         watchparty.location = request.data["location"]
         watchparty.number_of_fans = request.data["number_of_fans"]
-        watchparty.game = Game.objects.get(name=request.data["game"])
+        watchparty.game = Game.objects.get(pk=request.data["game"])
+        watchparty.joined = None
 
         try:
             watchparty.save()
@@ -92,6 +93,7 @@ class WatchParties(ViewSet):
         watchparty.location = request.data["location"]
         watchparty.number_of_fans = request.data["number_of_fans"]
         watchparty.game = Game.objects.get(pk=request.data["game"])
+        watchparty.joined = None
         watchparty.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -133,21 +135,22 @@ class WatchParties(ViewSet):
         # A fan wants to sign up for a watchparty
         if request.method == "GET":
 
-            joinedWatchParties = []
+            joined_watch_parties = []
             fan = Fan.objects.get(user=request.auth.user)
 
-            watchparties = WatchParty.objects.filter(user=fan, joined=True)
+            watchparties = WatchParty.objects.all()
             for watchparty in watchparties:
-                watchparty.joined = None
 
                 try:
-                    WatchPartyFan.objects.get(watchparty=watchparty, fan=fan)
+                    WatchPartyFan.objects.get(
+                        watchparty=watchparty.id, fan=fan.id)
                     watchparty.joined = True
-                    joinedWatchParties.append(watchparty)
+                    joined_watch_parties.append(watchparty)
                 except WatchPartyFan.DoesNotExist:
                     watchparty.joined = False
+
             serializer = WatchPartySerializer(
-                joinedWatchParties, many=True, context={'request': request})
+                joined_watch_parties, many=True, context={'request': request})
             return Response(serializer.data)
 
     @ action(methods=['post', 'delete'], detail=True)
