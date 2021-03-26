@@ -19,5 +19,33 @@
         "fields": {
             "type": "Auto Racing"
         }
+    },
+    {
+        "model": "watchpartyapi.sporttype",
+        "pk": 4,
+        "fields": {
+            "type": "Football"
+        }
+    },
+    {
+        "model": "watchpartyapi.sporttype",
+        "pk": 5,
+        "fields": {
+            "type": "Soccer"
+        }
+    },
+    {
+        "model": "watchpartyapi.sporttype",
+        "pk": 6,
+        "fields": {
+            "type": "Extreme Sports"
+        }
+    },
+    {
+        "model": "watchpartyapi.sporttype",
+        "pk": 7,
+        "fields": {
+            "type": "Basketball"
+        }
     }
 ]
