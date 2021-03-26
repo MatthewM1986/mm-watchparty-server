@@ -2,6 +2,7 @@ from django.db import models
 
 
 class WatchParty(models.Model):
+    user = models.ForeignKey("Fan", on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     scheduled_time = models.TimeField()
     game = models.ForeignKey("Game", on_delete=models.CASCADE)

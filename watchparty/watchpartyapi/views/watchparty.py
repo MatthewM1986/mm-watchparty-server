@@ -66,11 +66,13 @@ class WatchParties(ViewSet):
         fan = Fan.objects.get(user=request.auth.user)
 
         watchparty = WatchParty()
+        watchparty.user = fan
         watchparty.name = request.data["name"]
         watchparty.scheduled_time = request.data["scheduled_time"]
         watchparty.location = request.data["location"]
         watchparty.number_of_fans = request.data["number_of_fans"]
-        watchparty.game = Game.objects.get(name=request.data["game"])
+        watchparty.game = Game.objects.get(pk=request.data["game"])
+        watchparty.joined = None
 
         try:
             watchparty.save()
@@ -90,8 +92,8 @@ class WatchParties(ViewSet):
         watchparty.scheduled_time = request.data["scheduled_time"]
         watchparty.location = request.data["location"]
         watchparty.number_of_fans = request.data["number_of_fans"]
-        game = Game.objects.get(pk=request.data["id"])
-        watchparty.game = game
+        watchparty.game = Game.objects.get(pk=request.data["game"])
+        watchparty.joined = None
         watchparty.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -113,7 +115,45 @@ class WatchParties(ViewSet):
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    @action(methods=['post', 'delete'], detail=True)
+    @action(methods=['get'], detail=False)
+    def user(self, request):
+
+        fan = Fan.objects.get(user=request.auth.user)
+
+        try:
+            watchparties = WatchParty.objects.filter(user=fan)
+            serializer = WatchPartySerializer(
+                watchparties, many=True, context={'request': request})
+            return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
+
+    @ action(methods=['get'], detail=False)
+    def joined(self, request):
+        """Managing fans signing up for watch parties"""
+
+        # A fan wants to sign up for a watchparty
+        if request.method == "GET":
+
+            joined_watch_parties = []
+            fan = Fan.objects.get(user=request.auth.user)
+
+            watchparties = WatchParty.objects.all()
+            for watchparty in watchparties:
+
+                try:
+                    WatchPartyFan.objects.get(
+                        watchparty=watchparty.id, fan=fan.id)
+                    watchparty.joined = True
+                    joined_watch_parties.append(watchparty)
+                except WatchPartyFan.DoesNotExist:
+                    watchparty.joined = False
+
+            serializer = WatchPartySerializer(
+                joined_watch_parties, many=True, context={'request': request})
+            return Response(serializer.data)
+
+    @ action(methods=['post', 'delete'], detail=True)
     def signup(self, request, pk=None):
         """Managing fans signing up for watch parties"""
 
@@ -186,11 +226,11 @@ class WatchPartyUserSerializer(serializers.ModelSerializer):
 
 class WatchPartyFanSerializer(serializers.ModelSerializer):
     """JSON serializer for Watch Party organizer"""
-    fan = WatchPartyUserSerializer(many=False)
+    user = WatchPartyUserSerializer(many=False)
 
     class Meta:
         model = WatchPartyFan
-        fields = ['fan']
+        fields = ['user']
 
 
 class GameSerializer(serializers.ModelSerializer):
@@ -200,7 +240,7 @@ class GameSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Game
-        fields = ('name', 'sport_type', 'team_one',
+        fields = ('id', 'name', 'sport_type', 'team_one',
                   'team_two', 'date', 'description')
         depth = 2
 
@@ -211,10 +251,11 @@ class WatchPartySerializer(serializers.ModelSerializer):
         serializers
     """
     game = GameSerializer(many=False)
+    user = WatchPartyFanSerializer(many=False)
 
     class Meta:
         model = WatchParty
-        fields = ('id', 'name', 'scheduled_time', 'game',
+        fields = ('user', 'id', 'name', 'scheduled_time', 'game',
                   'location', 'number_of_fans',
                   'joined')
         depth = 2

@@ -3,6 +3,7 @@
         "model": "watchpartyapi.watchparty",
         "pk": 1,
         "fields": {
+            "user_id": 1,
             "name": "Preds Watch Party at Main Street Pub",
             "scheduled_time": "7:00",
             "game": 1,
@@ -14,6 +15,7 @@
         "model": "watchpartyapi.watchparty",
         "pk": 2,
         "fields": {
+            "user_id": 1,
             "name": "Preds Awesome Watch Party",
             "scheduled_time": "7:00",
             "game": 1,
@@ -25,6 +27,7 @@
         "model": "watchpartyapi.watchparty",
         "pk": 3,
         "fields": {
+            "user_id": 1,
             "name": "Bristol Watch party",
             "scheduled_time": "12:00",
             "game": 3,
